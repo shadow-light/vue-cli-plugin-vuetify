@@ -44,7 +44,9 @@ module.exports = function (api) {
 
       lines = callback(lines)
 
-      content = lines.join('\n')
+      content = Array.isArray(lines)
+        ? lines.join('\n')
+        : lines
       fs.writeFileSync(mainPath, content, { encoding: 'utf8' })
     }
   }

@@ -1,46 +1,34 @@
+const fs = require('fs')
+
 module.exports = (api, opts, rootOpts) => {
   const helpers = require('./helpers')(api)
 
+  // Add Vuetify dependency
   api.extendPackage({
     dependencies: {
-      vuetify: "^1.0.16"
+      vuetify: '^1.0.18'
     }
   })
 
+  // A-la-carte components
   if (opts.useAlaCarte) {
     api.extendPackage({
       devDependencies: {
-        "babel-plugin-transform-imports": "^1.4.1",
-        "stylus": "^0.54.5",
-        "stylus-loader": "^3.0.1",
+        'babel-plugin-transform-imports': '^1.4.1',
+        'stylus': '^0.54.5',
+        'stylus-loader': '^3.0.1',
       }
     })
   }
 
   // Render vuetify plugin file
   api.render({
-    './src/plugins/vuetify.js': './templates/default/src/plugins/vuetify.js'
+    './src/plugins/vuetify.js': './shared/plugins/vuetify.js'
   }, opts)
 
-  // Render files if we're replacing
-  const fs = require('fs')
-  const routerPath = api.resolve('./src/router.js')
-  opts.router = fs.existsSync(routerPath)
+  const template = require(`./config/${opts.template}`)
 
-  if (opts.replaceComponents) {
-    const files = {
-      './src/App.vue': './templates/default/src/App.vue',
-      './src/assets/logo.png': './templates/default/src/assets/logo.png'
-    }
-
-    if (opts.router) {
-      files['./src/views/Home.vue'] = './templates/default/src/views/Home.vue'
-    } else {
-      files['./src/components/HelloWorld.vue'] = './templates/default/src/components/HelloWorld.vue'
-    }
-
-    api.render(files, opts)
-  }
+  template(api, opts, rootOpts, helpers)
 
   // adapted from https://github.com/Akryum/vue-cli-plugin-apollo/blob/master/generator/index.js#L68-L91
   api.onCreateComplete(() => {

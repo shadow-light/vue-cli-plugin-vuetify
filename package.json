@@ -25,5 +25,10 @@
   "homepage": "https://github.com/vuetifyjs/vue-cli-plugin-vuetify#readme",
   "dependencies": {
     "rimraf": "^2.6.2"
+  },
+  "devDependencies": {
+    "lodash.merge": "^4.6.1",
+    "vue-server-renderer": "^2.5.16",
+    "webpack-node-externals": "^1.7.2"
   }
 }
